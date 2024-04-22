@@ -2,17 +2,17 @@ require("dotenv").config();
 
 const User = require("../models/user.model");
 const { JWT_TIMEOUT } = require("./utils/constants");
-const { getToken, createToken } = require("./utils/jwt");
+const { createToken } = require("./utils/jwt");
 
 exports.signup_post = async (req, res) => {
   try {
-    const { email, name, password, r_password, roles } = req.body;
+    const { email, name, password, r_password } = req.body;
 
     if (password !== r_password) {
       return res.status(403).json({ error: "Password mismatch" });
     }
 
-    const user = new User({ email, password, name, roles });
+    const user = new User({ email, password, name });
     await user.save();
 
     const token = createToken(user._id);
@@ -21,16 +21,6 @@ exports.signup_post = async (req, res) => {
     return res.status(201).json({ user: user._id });
   } catch (error) {
     console.error(error);
-    return res.status(400).json(error);
-  }
-};
-
-exports.login_get = async (req, res) => {
-  try {
-    const userId = req.userId;
-
-    return res.status(200).json({ userId });
-  } catch (error) {
     return res.status(400).json(error);
   }
 };
