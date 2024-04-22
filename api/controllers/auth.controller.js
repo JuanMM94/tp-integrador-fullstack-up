@@ -52,6 +52,10 @@ exports.login_post = async (req, res) => {
 };
 
 exports.logout_get = (req, res) => {
-  res.clearCookie("jwt");
-  return res.sendStatus(204);
+  try {
+    res.clearCookie("jwt");
+    return res.sendStatus(204);
+  } catch (error) {
+    return res.sendStatus(403);
+  }
 };
