@@ -1,29 +1,43 @@
 const User = require("../models/user.model");
 
-exports.getAllUsers = async (req, res) => {
+exports.me_get = async (req, res) => {
   try {
-    const users = await User.find({});
+    const id = req.userId.data;
 
-    res.status(200).json(users);
+    const user = await User.findById(id)
+      .select("-password")
+      .populate("plushies")
+      .exec();
+
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(400).json(error);
   }
 };
 
-exports.getUserByID = async (req, res) => {};
+exports.me_patch = async (req, res) => {
+  const id = req.userId.data;
+  const { name, password, r_password } = req.body;
 
-exports.addNewUser = async (req, res) => {
   try {
-    const user = new User(req.body);
+    const user = await User.findById(id);
+
+    if (password !== r_password) {
+      return res.status(304).json({ error: "Password mismatch" });
+    }
+
+    if (name) {
+      user.name = name;
+    }
+
+    if (password) {
+      user.password = password;
+    }
+
     await user.save();
-    res.status(201).json(user);
+
+    return res.sendStatus(204);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json(error);
   }
 };
-
-exports.updateUserByID = (req, res) => {};
-
-exports.patchUserByID = (req, res) => {};
-
-exports.deleteUserByID = (req, res) => {};
