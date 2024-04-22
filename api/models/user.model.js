@@ -23,16 +23,11 @@ const UserSchema = new Schema(
       minLength: 6,
       required: [true, "Must provide a password"],
     },
-    roles: {
-      type: String,
-      enum: ["admin", "user"],
-      default: "user",
-    },
     isActive: {
       type: Boolean,
       default: true,
     },
-    plushes: [{ type: Schema.Types.ObjectId, ref: "Plush" }],
+    plushies: [{ type: Schema.Types.ObjectId, ref: "Plushie" }],
   },
   {
     timestamps: true,
@@ -50,14 +45,20 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.methods.comparePassword = async function (textPassword) {
-  const user = this;
+UserSchema.statics.login = async function (email, textPassword) {
+  const user = await this.findOne({ email });
 
-  try {
-    return await bcrypt.compare(textPassword, user.password);
-  } catch (error) {
-    throw error;
+  if (user) {
+    const isMatch = await bcrypt.compare(textPassword, user.password);
+
+    if (isMatch) {
+      return user;
+    }
+
+    throw Error("Incorrect password");
   }
+
+  throw Error("Incorrect email");
 };
 
 const User = mongoose.model("User", UserSchema);
