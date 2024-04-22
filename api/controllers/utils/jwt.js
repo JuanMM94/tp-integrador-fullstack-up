@@ -1,6 +1,9 @@
+require("dotenv").config();
+
 const jwt = require("jsonwebtoken");
 
-const { JWT_SECRET, JWT_TIMEOUT } = process.env;
+const { JWT_TIMEOUT } = require("./constants");
+const { JWT_SECRET } = process.env;
 
 exports.createToken = (payload) => {
   return jwt.sign(
@@ -14,13 +17,8 @@ exports.createToken = (payload) => {
   );
 };
 
-exports.getToken = (token) => {
-  let data;
+exports.verifyToken = (token, cb) => {
+  if (!token) return null;
 
-  jwt.verify(token, JWT_SECRET, (error, decoded) => {
-    if (error) data = error;
-    else data = decoded;
-  });
-
-  return data;
+  return jwt.verify(token, JWT_SECRET, cb)
 };
