@@ -9,5 +9,15 @@ router.post(
   authMiddleware.requireAuth,
   plushieController.plushies_post
 );
+router.delete(
+  "/plushies/:id",
+  authMiddleware.requireAuth,
+  plushieController.plushies_delete
+);
+router.get(
+  "/me/plushies",
+  authMiddleware.requireAuth,
+  plushieController.me_plushies_get
+);
 
 module.exports = router;
