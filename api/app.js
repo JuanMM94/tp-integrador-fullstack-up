@@ -10,7 +10,6 @@ const bodyParser = require("body-parser");
 const { MONGO_URI, PORT } = process.env;
 
 const app = express();
-app.name = "API";
 
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -19,15 +18,17 @@ app.use(cors());
 
 const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const plushiesRoutes = require("./routes/plushies");
 
 app.use("/api", usersRoutes);
 app.use("/api", authRoutes);
+app.use("/api", plushiesRoutes);
 
 try {
   mongoose.connect(MONGO_URI);
-  console.log("%s Connected to the Database");
+  console.log("Connected to the Database");
 } catch (error) {
   throw new Error(error.message);
 }
 
-app.listen(PORT, () => console.log(`%s Listening to port ${PORT}`));
+app.listen(PORT, () => console.log(`Listening to port ${PORT}`));
