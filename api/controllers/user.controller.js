@@ -17,14 +17,10 @@ exports.me_get = async (req, res) => {
 
 exports.me_patch = async (req, res) => {
   const id = req.userId.data;
-  const { name, password, r_password } = req.body;
+  const { name, password } = req.body;
 
   try {
     const user = await User.findById(id);
-
-    if (password !== r_password) {
-      return res.status(304).json({ error: "Password mismatch" });
-    }
 
     if (name) {
       user.name = name;

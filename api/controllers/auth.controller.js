@@ -6,11 +6,7 @@ const { createToken } = require("./utils/jwt");
 
 exports.signup_post = async (req, res) => {
   try {
-    const { email, name, password, r_password } = req.body;
-
-    if (password !== r_password) {
-      return res.status(403).json({ error: "Password mismatch" });
-    }
+    const { email, name, password } = req.body;
 
     const user = new User({ email, password, name });
     await user.save();
