@@ -15,7 +15,7 @@ router.delete(
   plushieController.plushies_delete
 );
 router.get(
-  "/me/plushies",
+  "/users/me/plushies",
   authMiddleware.requireAuth,
   plushieController.me_plushies_get
 );
