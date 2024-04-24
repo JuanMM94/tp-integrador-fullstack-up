@@ -19,5 +19,6 @@ router.get(
   authMiddleware.requireAuth,
   plushieController.me_plushies_get
 );
+router.get("/plushies/ranking", plushieController.plushies_ranking_get);
 
 module.exports = router;

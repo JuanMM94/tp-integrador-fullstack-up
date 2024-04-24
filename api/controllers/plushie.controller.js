@@ -7,6 +7,7 @@ exports.plushies_get = async (req, res) => {
 
     return res.status(200).json(plushies);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -26,6 +27,7 @@ exports.plushies_post = async (req, res) => {
 
     return res.status(201).json(plushie);
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -40,7 +42,7 @@ exports.plushies_delete = async (req, res) => {
 
     return res.sendStatus(204);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -55,5 +57,28 @@ exports.me_plushies_get = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: error.message });
+  }
+};
+
+exports.plushies_ranking_get = async (req, res) => {
+  try {
+    const ranking = await Plushie.aggregate([
+      {
+        $group: {
+          _id: {
+            type: "$type",
+            color: "$color",
+            props: "$props",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+
+    return res.status(200).json(ranking);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
   }
 };
