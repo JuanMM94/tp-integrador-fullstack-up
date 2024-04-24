@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const User = require("../models/user.model");
-const { JWT_TIMEOUT } = require("./utils/constants");
+const { JWT_TIMEOUT } = require("../utils/constants");
 const { createToken } = require("./utils/jwt");
 
 exports.signup_post = async (req, res) => {

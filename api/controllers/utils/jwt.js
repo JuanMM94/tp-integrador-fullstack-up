@@ -3,7 +3,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const { JWT_SECRET } = process.env;
-const { JWT_TIMEOUT } = require("./constants");
+const { JWT_TIMEOUT } = require("../../utils/constants");
 
 exports.createToken = (payload) => {
   return jwt.sign(

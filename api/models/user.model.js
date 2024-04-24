@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 const { isEmail } = require("validator");
 
-const SALT_ROUNDS = 10;
+const { SALT_ROUNDS } = require("../utils/constants");
 
 const UserSchema = new Schema(
   {
