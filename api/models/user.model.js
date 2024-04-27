@@ -23,9 +23,13 @@ const UserSchema = new Schema(
       minLength: 6,
       required: [true, "Must provide a password"],
     },
-    isActive: {
+    isValidated: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    token: {
+      type: String,
+      default: null,
     },
     plushies: [{ type: Schema.Types.ObjectId, ref: "Plushie" }],
   },
