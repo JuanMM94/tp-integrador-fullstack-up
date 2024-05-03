@@ -4,6 +4,9 @@ const bcrypt = require("bcryptjs");
 const { isEmail } = require("validator");
 
 const { SALT_ROUNDS } = require("../utils/constants");
+const Token = require("./token.model");
+const { sendEmail } = require("../controllers/utils/emailSender");
+const { createToken } = require("../controllers/utils/jwt");
 
 const UserSchema = new Schema(
   {
@@ -23,9 +26,9 @@ const UserSchema = new Schema(
       minLength: 6,
       required: [true, "Must provide a password"],
     },
-    isActive: {
+    isVerified: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     plushies: [{ type: Schema.Types.ObjectId, ref: "Plushie" }],
   },
@@ -44,6 +47,24 @@ UserSchema.pre("save", async function (next) {
   user.password = hashedPassword;
   next();
 });
+
+UserSchema.statics.signup = async function (email, name, password) {
+  const user = new User({ email, password, name });
+  await user.save();
+
+  const token = new Token({ _userId: user._id, token: createToken(user._id) });
+  await token.save();
+
+  await sendEmail(email, token.token);
+
+  return {
+    email: user.email,
+    name: user.name,
+    isVerified: user.isVerified,
+    _id: user._id,
+    createdAt: user.createdAt,
+  };
+};
 
 UserSchema.statics.login = async function (email, textPassword) {
   const user = await this.findOne({ email });
