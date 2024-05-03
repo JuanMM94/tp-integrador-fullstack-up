@@ -61,11 +61,8 @@ UserSchema.statics.signup = async function (email, name, password) {
     email: user.email,
     name: user.name,
     isVerified: user.isVerified,
-    plushies: user.plushies,
     _id: user._id,
     createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    __v: user.__v,
   };
 };
 
