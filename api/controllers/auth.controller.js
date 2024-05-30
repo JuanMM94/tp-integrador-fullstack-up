@@ -32,7 +32,7 @@ exports.login_post = async (req, res) => {
     const token = createToken(user._id);
 
     res.cookie("jwt", token, { httpOnly: true, maxAge: JWT_TIMEOUT * 1000 });
-    return res.status(200).json({ user: user._id });
+    return res.status(200).json(user);
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: error.message });

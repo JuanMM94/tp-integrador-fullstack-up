@@ -2,10 +2,23 @@ const Plushie = require("../models/plushie.model");
 const User = require("../models/user.model");
 
 exports.plushies_get = async (req, res) => {
-  try {
-    const plushies = await Plushie.find({});
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
 
-    return res.status(200).json(plushies);
+  const skip = (page - 1) * limit;
+
+  try {
+    const plushies = await Plushie.find({}).limit(limit).skip(skip);
+
+    const totalDocuments = await Plushie.countDocuments({});
+
+    return res.status(200).json({
+      totalPages: Math.ceil(totalDocuments / limit),
+      currentPage: page,
+      currentLimit: limit,
+      totalItems: totalDocuments,
+      plushies: plushies,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: error.message });
