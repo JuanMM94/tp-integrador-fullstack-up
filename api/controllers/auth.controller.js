@@ -31,17 +31,27 @@ exports.login_post = async (req, res) => {
 
     const token = createToken(user._id);
 
-    res.cookie("jwt", token, { httpOnly: true, maxAge: JWT_TIMEOUT * 1000 });
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: JWT_TIMEOUT * 1000,
+      secure: false,
+      path: "/",
+    });
     return res.status(200).json(user);
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ error: error.message });
+    return res.status(401).json({ error: error.message });
   }
 };
 
 exports.logout_get = (req, res) => {
   try {
-    res.clearCookie("jwt");
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      secure: false,
+      domain: "localhost",
+      path: "/",
+    });
     return res.sendStatus(204);
   } catch (error) {
     return res.sendStatus(403);
