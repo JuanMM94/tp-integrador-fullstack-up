@@ -89,7 +89,14 @@ exports.plushies_ranking_get = async (req, res) => {
       { $sort: { count: -1 } },
     ]);
 
-    return res.status(200).json(ranking);
+    const transformedRanking = ranking.map(item => ({
+      type: item._id.type,
+      color: item._id.color,
+      props: item._id.props,
+      count: item.count
+    }));
+
+    return res.status(200).json(transformedRanking);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: error.message });
