@@ -1,95 +1,79 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import React from "react";
+import {
+  Box,
+  CircularProgress,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { API_URL } from "@/constants/constants";
+import useSWR from "swr";
+import fetcher from "@/lib/fetcher";
+import Plushie from "@/components/Plushie";
+import RankingCard from "@/components/RankingCard";
 
-export default function Home() {
+export interface PlushieProp {
+  _id: string;
+  _creator: string;
+  color: string;
+  type: string;
+  props: string;
+}
+
+export default function Page() {
+  const [pageIndex, setPageIndex] = React.useState(1);
+
+  const { data, isLoading } = useSWR(
+    `${API_URL}/plushies?page=${pageIndex}&limit=15`,
+    fetcher
+  );
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPageIndex(value);
+  };
+
+  console.log(data);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main>
+      <Stack
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <RankingCard />
+        <Typography variant="h2">Peluches creados por los usuarios</Typography>
+        {isLoading && (
+          <Box my={30}>
+            <CircularProgress />
+          </Box>
+        )}
+        {data && (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 4,
+              my: 4,
+              justifyContent: "space-around",
+            }}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            {data.plushies.map((plushie: PlushieProp) => (
+              <Plushie key={plushie._id} {...plushie} />
+            ))}
+          </Box>
+        )}
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+        <Pagination
+          sx={{ display: "flex", justifyContent: "center" }}
+          count={isLoading ? 5 : data.totalPages}
+          onChange={handleChange}
+          disabled={isLoading ? true : false}
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      </Stack>
     </main>
   );
 }
