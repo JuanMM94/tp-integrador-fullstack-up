@@ -34,7 +34,7 @@ exports.sendEmail = async (email, token) => {
         button: {
           color: "#22BC66",
           text: "Confirma tu cuenta",
-          link: `http://localhost:5000/api/auth/confirmation/${token}`,
+          link: `http://localhost:3000/confirmation/${token}`,
         },
       },
     },
