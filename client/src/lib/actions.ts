@@ -1,20 +1,30 @@
-import { API_URL } from "@/constants/constants";
+import { API_URL, JWT_SECRET } from "@/constants/constants";
+import { jwtVerify } from "jose";
 
 interface FormDataJSON {
   email: string;
   password: string;
 }
 
-async function getUser() {
+export const joseVerify = async (jwt: string | undefined) => {
+  if (!jwt) return null;
+
+  try {
+    const secretKey = new TextEncoder().encode(JWT_SECRET);
+    const { payload } = await jwtVerify(jwt, secretKey);
+    return payload;
+  } catch (error) {
+    console.log("joseVerify", error);
+  }
+};
+
+export async function getUser() {
   try {
     const res = await fetch(`${API_URL}/users/me`, {
       method: "GET",
       credentials: "include",
     });
     const data = await res.json();
-    console.log(res);
-    // console.log("req headers", request.headers);
-    // console.log("req cookies", request.cookies);
     return data;
   } catch (e) {
     console.log(e);

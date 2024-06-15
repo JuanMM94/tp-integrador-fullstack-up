@@ -9,20 +9,15 @@ type Props = {
 };
 
 const BackgroundVideo: React.FC<Props> = ({ children }) => (
-  <Box
-    sx={{
-      position: "relative",
-      overflow: "hidden",
-    }}
-  >
+  <Box>
     <Box
       sx={{
         position: "absolute",
         top: 0,
         left: "50%",
         transform: "translateX(-50%)",
-        width: "100%",
-        // height: "100%",
+        width: "100%",  
+        height: "100%",
         // This is to merge with background
         maskImage: `radial-gradient(
           80% 50.00% at 50% 50.00%,

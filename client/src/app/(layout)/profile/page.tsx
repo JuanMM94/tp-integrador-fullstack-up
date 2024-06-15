@@ -1,9 +1,19 @@
-import { Box, Typography } from "@mui/material";
+"use client";
+import { API_URL } from "@/constants/constants";
+import fetcher from "@/lib/fetcher";
+import { Box } from "@mui/material";
+import useSWR from "swr";
 
 export default function Page() {
-  return (
-    <Box>
-      <Typography>PROFILE</Typography>
-    </Box>
+  const options = {
+    method: "GET",
+    credentials: "include",
+  };
+
+  const { data, isLoading } = useSWR(
+    [`${API_URL}/users/me/plushies`, options],
+    ([url, options]) => fetcher(url, options)
   );
+
+  return <Box></Box>;
 }

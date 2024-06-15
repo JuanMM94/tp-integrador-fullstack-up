@@ -1,5 +1,10 @@
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "./RegisterForm";
+import { Box } from "@mui/material";
 
 export default function Page() {
-  return <RegisterForm />;
+  return (
+    <Box>
+      <RegisterForm />
+    </Box>
+  );
 }

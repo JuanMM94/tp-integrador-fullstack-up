@@ -10,8 +10,8 @@ import {
 import { API_URL } from "@/constants/constants";
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
-import Plushie from "@/components/Plushie";
-import RankingCard from "@/components/RankingCard";
+import Plushie from "@/shared/Plushie";
+import RankingCard from "@/shared/RankingCard";
 
 export interface PlushieProp {
   _id: string;
@@ -25,15 +25,13 @@ export default function Page() {
   const [pageIndex, setPageIndex] = React.useState(1);
 
   const { data, isLoading } = useSWR(
-    `${API_URL}/plushies?page=${pageIndex}&limit=15`,
+    `${API_URL}/plushies?page=${pageIndex}&limit=30`,
     fetcher
   );
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPageIndex(value);
   };
-
-  console.log(data);
 
   return (
     <main>
@@ -58,7 +56,11 @@ export default function Page() {
               flexWrap: "wrap",
               gap: 4,
               my: 4,
-              justifyContent: "space-around",
+              justifyContent: {
+                xs: "center",
+                sm: "space-evenly",
+                md: "space-between",
+              },
             }}
           >
             {data.plushies.map((plushie: PlushieProp) => (

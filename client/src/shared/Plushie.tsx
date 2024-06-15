@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box } from "@mui/material";
+import { Paper } from "@mui/material";
 import Image from "next/image";
 import { PlushieProp } from "@/app/page";
 
@@ -10,7 +10,7 @@ export default function Plushie({ type, props, color }: PlushieProp) {
   const coloredProps = `${sliceProps}_${sliceColor}`;
 
   return (
-    <Box>
+    <Paper elevation={1} square>
       <Image width={100} height={100} alt={type} src={`/heads/${type}.png`} />
       <Image
         width={100}
@@ -18,6 +18,6 @@ export default function Plushie({ type, props, color }: PlushieProp) {
         alt={`${props} ${color}`}
         src={`/props/${coloredProps}.png`}
       />
-    </Box>
+    </Paper>
   );
 }
