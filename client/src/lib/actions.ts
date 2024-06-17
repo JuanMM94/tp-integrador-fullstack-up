@@ -69,3 +69,16 @@ export const register = async (formData: FormDataJSON) => {
     console.log("error", error);
   }
 };
+
+export const logout = async () => {
+  const options = {
+    method: "GET",
+    credentials: "include" as RequestCredentials,
+  };
+
+  try {
+    return await fetch(`${API_URL}/auth/logout`, options);
+  } catch (error) {
+    console.error(error);
+  }
+};

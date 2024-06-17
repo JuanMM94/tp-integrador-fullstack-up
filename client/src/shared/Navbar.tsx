@@ -13,8 +13,6 @@ import { useAuth } from "./contexts/AuthContext";
 export default function Navbar() {
   const { user } = useAuth();
 
-  console.log(user)
-
   return (
     <AppBar position="static">
       <Toolbar>
@@ -30,12 +28,12 @@ export default function Navbar() {
             Creador de Peluches
           </Typography>
         </Box>
-        {false ? (
+        {user?.isVerified ? (
           <>
             <Link href="/profile">
               <Button sx={{ color: "white" }}>Perfil</Button>
             </Link>
-            <Link href="/logout">
+            <Link href="/profile/logout">
               <Button sx={{ color: "white" }}>Salir</Button>
             </Link>
           </>
