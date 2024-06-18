@@ -16,7 +16,7 @@ const BackgroundVideo: React.FC<Props> = ({ children }) => (
         top: 0,
         left: "50%",
         transform: "translateX(-50%)",
-        width: "100%",  
+        width: "100%",
         height: "100%",
         // This is to merge with background
         maskImage: `radial-gradient(
@@ -25,6 +25,7 @@ const BackgroundVideo: React.FC<Props> = ({ children }) => (
           rgba(255, 255, 255, 0.001) 100%
         )`,
         zIndex: -1,
+        objectFit: { lg: "fill" },
       }}
       component="video"
       autoPlay

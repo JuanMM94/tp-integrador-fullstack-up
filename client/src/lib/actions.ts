@@ -18,19 +18,6 @@ export const joseVerify = async (jwt: string | undefined) => {
   }
 };
 
-export async function getUser() {
-  try {
-    const res = await fetch(`${API_URL}/users/me`, {
-      method: "GET",
-      credentials: "include",
-    });
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 export const login = async (formData: FormDataJSON) => {
   const options = {
     method: "POST",
