@@ -1,9 +1,8 @@
-import { PlushieProp } from "@/app/page";
 import { API_URL } from "@/constants/constants";
 import fetcher from "@/lib/fetcher";
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import useSWR from "swr";
-import Plushie from "./Plushie";
+import Plushie, { PlushieProp } from "./Plushie";
 
 export default function RankingCard() {
   const { data, isLoading } = useSWR(`${API_URL}/plushies/ranking`, fetcher);

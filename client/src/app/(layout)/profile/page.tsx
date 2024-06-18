@@ -1,9 +1,15 @@
 "use client";
 import { API_URL } from "@/constants/constants";
 import fetcher from "@/lib/fetcher";
-import { useAuth } from "@/shared/contexts/AuthContext";
 import Plushie from "@/shared/Plushie";
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import { AddCircle } from "@mui/icons-material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import useSWR from "swr";
 
@@ -13,12 +19,16 @@ export default function Page() {
     credentials: "include",
   };
 
-  const { data, isLoading } = useSWR(
+  const { data: plushies, isLoading } = useSWR(
     [`${API_URL}/users/me/plushies`, options],
-    ([url, options]) => fetcher(url, options)
+    ([url, options]) => fetcher(url, options),
+    { refreshInterval: 100 }
   );
 
-  const { user } = useAuth();
+  const { data: user } = useSWR(
+    [`${API_URL}/users/me`, options],
+    ([url, options]) => fetcher(url, options)
+  );
 
   return (
     <Container sx={{ mt: 8 }}>
@@ -40,7 +50,7 @@ export default function Page() {
         <Typography variant="h6">Tus peluches</Typography>
         {isLoading ? (
           <CircularProgress />
-        ) : data?.length === 0 ? (
+        ) : plushies?.length === 0 ? (
           <Typography>
             Parece que no tenés peluches! Creá uno{" "}
             <Box component={Link} href="/profile/create">
@@ -49,9 +59,27 @@ export default function Page() {
             .
           </Typography>
         ) : (
-          data?.map((plushie: any) => (
-            <Plushie key={plushie._id} {...plushie} />
-          ))
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              flexWrap: "wrap",
+              justifyContent: {
+                xs: "center",
+                sm: "space-evenly",
+                md: "space-between",
+              },
+            }}
+          >
+            <Box sx={{ mb: 2 }}>
+              <IconButton component={Link} href="/profile/create">
+                <AddCircle />
+              </IconButton>
+            </Box>
+            {plushies.map((plushie: any) => (
+              <Plushie key={plushie._id} {...plushie} showDeleteButton={true} />
+            ))}
+          </Box>
         )}
       </Box>
     </Container>

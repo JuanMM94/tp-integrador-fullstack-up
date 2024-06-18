@@ -10,16 +10,8 @@ import {
 import { API_URL } from "@/constants/constants";
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
-import Plushie from "@/shared/Plushie";
+import Plushie, { PlushieProp } from "@/shared/Plushie";
 import RankingCard from "@/shared/RankingCard";
-
-export interface PlushieProp {
-  _id: string;
-  _creator: string;
-  color: string;
-  type: string;
-  props: string;
-}
 
 export default function Page() {
   const [pageIndex, setPageIndex] = React.useState(1);
@@ -64,7 +56,11 @@ export default function Page() {
             }}
           >
             {data.plushies.map((plushie: PlushieProp) => (
-              <Plushie key={plushie._id} {...plushie} />
+              <Plushie
+                key={plushie._id}
+                {...plushie}
+                showDeleteButton={false}
+              />
             ))}
           </Box>
         )}

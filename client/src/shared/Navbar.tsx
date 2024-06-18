@@ -8,10 +8,20 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Image from "next/image";
 import Link from "next/link";
-import { useAuth } from "./contexts/AuthContext";
+import useSWR from "swr";
+import { API_URL } from "@/constants/constants";
+import fetcher from "@/lib/fetcher";
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const options = {
+    method: "GET",
+    credentials: "include" as RequestCredentials,
+  };
+  const { data: user } = useSWR(
+    [`${API_URL}/users/me`, options],
+    ([url, options]) => fetcher(url, options),
+    { refreshInterval: 100 }
+  );
 
   return (
     <AppBar position="static">

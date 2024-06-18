@@ -73,7 +73,6 @@ export default function LoginForm() {
           setOpen(true);
           setTimeout(() => {
             setOpen(false);
-            router.refresh();
             router.push("/");
           }, 2000);
         } else {
