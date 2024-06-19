@@ -51,7 +51,7 @@ export default function Page() {
               justifyContent: {
                 xs: "center",
                 sm: "space-evenly",
-                md: "space-between",
+                md: "flex-start",
               },
             }}
           >
